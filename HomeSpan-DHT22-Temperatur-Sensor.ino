@@ -39,21 +39,23 @@
 void setup() {
   
   Serial.begin(115200);
-  homeSpan.begin(Category::Sensors,"AZDelivery Temp Sensor");
+  homeSpan.begin(Category::Bridges,"AZDelivery Temp Sensor Bridge");
+
+  new SpanAccessory();  
+    new DEV_Identify("AZDelivery HomeKit","SmartHomeFactory","123-ABC","HS Bridge","0.9",3);
+    new Service::HAPProtocolInformation();
+      new Characteristic::Version("1.1.0");
       
   new SpanAccessory();                                                          
-    new DEV_Identify("AZDelivery Temp Sensor","SmartHomeFactory","123-ABC","Sensor","0.9",0);
-    new Service::HAPProtocolInformation();
-      new Characteristic::Version("1.1.0");
+    new DEV_Identify("DHT22 Temp Sensor","SmartHomeFactory","123-ABC","Sensor","0.9",0);
     // Create a Temperature Sensor (see DEV_Sensors.h for definition)
-    new DEV_TempSensor();                                                                
-    
+    new DEV_TempSensor(); 
+        
+
   new SpanAccessory();
-    new DEV_Identify("AZDelivery Humidity Sensor","SmartHomeFactory","123-ABC","Sensor","0.9",0);
-    new Service::HAPProtocolInformation();
-      new Characteristic::Version("1.1.0");
+    new DEV_Identify("DHT22 Humidity Sensor","SmartHomeFactory","123-ABC","Sensor","0.9",0);
     // Create a Humidity Sensor (see DEV_Sensors.h for definition)
-    new DEV_HumSensor();                                                                
+    new DEV_HumSensor();
     
 } // end of setup()
 

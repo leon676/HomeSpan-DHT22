@@ -3,20 +3,23 @@
 ////////////////////////////////
 #include "DHT.h"
 
+#define DHTPIN 17
+#define DHTTYPE DHT22
+
+// reference to the Sensor Objects
+DHT dht(DHTPIN, DHTTYPE);
+
 // A standalone Temperature sensor
 struct DEV_TempSensor : Service::TemperatureSensor {     
 
   // reference to the Current Temperature Characteristic
-  SpanCharacteristic *temp;                              
-
-  // reference to the Sensor Object
-  DHT dhttemp(17, DHT22);           
+  SpanCharacteristic *temp;                                       
 
   // constructor() method
   DEV_TempSensor() : Service::TemperatureSensor() {      
 
     // start dhttemp Object
-    dhttemp.begin();                                    
+    dht.begin();                                    
 
     // instantiate the Current Temperature Characteristic
     temp = new Characteristic::CurrentTemperature(-10.0);     
@@ -34,7 +37,7 @@ struct DEV_TempSensor : Service::TemperatureSensor {
     // the temperature refreshes every 10 seconds by the elapsed time
     if (temp->timeVal() > 10000) {
       // read temperature from sensor dht22
-      float temperature = dhttemp.readTemperature();        
+      float temperature = dht.readTemperature();        
       // set the new temperature; this generates an Event Notification and also resets the elapsed time
       temp->setVal(temperature);                            
 
@@ -51,16 +54,13 @@ struct DEV_TempSensor : Service::TemperatureSensor {
 struct DEV_HumSensor : Service::HumiditySensor {     
 
   // reference to the Current Humidity Characteristic
-  SpanCharacteristic *hum;                           
-
-  // reference to the Sensor Object
-  DHT dhthum(DHTPIN, DHTTYPE);        
+  SpanCharacteristic *hum;                                  
 
   // constructor() method
   DEV_HumSensor() : Service::HumiditySensor() {      
 
     // start dhthum Object
-    dhthum.begin();                                  
+    dht.begin();                                  
 
     // instantiate the Current Temperature Characteristic
     hum = new Characteristic::CurrentRelativeHumidity(50);
@@ -78,7 +78,7 @@ struct DEV_HumSensor : Service::HumiditySensor {
     // the humidity refreshes every 10 seconds by the elapsed time
     if (hum->timeVal() > 10000) {
       // read humidity from sensor dht22
-      float humidity = dhthum.readHumidity();  
+      float humidity = dht.readHumidity();  
       // set the new humidity; this generates an Event Notification and also resets the elapsed time        
       hum->setVal(humidity);                            
 
